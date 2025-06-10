@@ -41,7 +41,10 @@ void	send_char(const int pid, const char c)
 void	send_message(const int pid, const char *message)
 {
 	while (*message)
+	{
 		send_char(pid, *(message++));
+		usleep(300);
+	}
 	send_char(pid, 0);
 }
 
@@ -63,8 +66,9 @@ int	main(int argc, char **argv)
 	sigaction(SIGUSR1, &sig, NULL);
 	sigaction(SIGUSR2, &sig, NULL);
 	send_message(g_serverpid, argv[2]);
-	while (1)
-		pause();
+	sleep(1);
+	write(2, "I think something went wrong :(\n", 32);
+	send_char(g_serverpid, 0);
 	return (0);
 }
 #else

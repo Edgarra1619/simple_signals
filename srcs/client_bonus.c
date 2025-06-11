@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 //here to filter incoming signals
-int		g_serverpid;
+static int		g_serverpid;
 
 void	send_message(const int pid, const char *message);
 

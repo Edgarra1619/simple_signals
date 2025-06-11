@@ -15,10 +15,7 @@ static void	handler(const int signal, siginfo_t *const info,
 	if (!current_pid)
 		current_pid = info->si_pid;
 	if (current_pid != info->si_pid)
-	{
-		kill(info->si_pid, SIGUSR1);
 		return ;
-	}
 	c = (c << 1) | (signal == SIGUSR2);
 	if (++offset == 8)
 	{
@@ -31,6 +28,8 @@ static void	handler(const int signal, siginfo_t *const info,
 		c = 0;
 		offset = 0;
 	}
+	if (current_pid)
+		kill(current_pid, SIGUSR1);
 }
 
 #else

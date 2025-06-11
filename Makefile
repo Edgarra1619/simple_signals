@@ -17,7 +17,7 @@ OBJS = $(OBJS1) $(OBJS2)
 
 ifeq ($(BONUS), 1)
 CFLAGS += -D BONUS
-SRCS = client_bonus.c
+SRCS1 = client_bonus.c
 endif
 
 all: $(NAME1) $(NAME2)

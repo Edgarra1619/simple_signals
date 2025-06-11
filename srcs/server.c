@@ -1,11 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: edgribei <edgribei@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/11 15:08:05 by edgribei          #+#    #+#             */
+/*   Updated: 2025/06/11 15:08:27 by edgribei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <libft.h>
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 
 #ifdef BONUS
+
 static void	handler(const int signal, siginfo_t *const info,
-			 void *const _cont)
+			void *const _cont)
 {
 	static int	c = 0;
 	static char	offset = 0;
@@ -35,7 +48,7 @@ static void	handler(const int signal, siginfo_t *const info,
 #else
 
 static void	handler(const int signal, siginfo_t *const info,
-			 void *const _cont)
+			void *const _cont)
 {
 	static int	c = 0;
 	static char	offset = 0;
@@ -70,7 +83,6 @@ static struct sigaction	init_sig(void)
 	sig.sa_flags = SA_SIGINFO;
 	sig.sa_mask = set;
 	sig.sa_sigaction = handler;
-
 	return (sig);
 }
 
@@ -80,9 +92,8 @@ int	main(void)
 
 	ft_putnbr_fd(getpid(), 1);
 	write(1, "\n", 1);
-
 	sigaction(SIGUSR1, &sig, NULL);
 	sigaction(SIGUSR2, &sig, NULL);
-	while(1)
+	while (1)
 		pause();
 }

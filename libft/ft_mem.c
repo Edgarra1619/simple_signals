@@ -31,7 +31,7 @@ void	ft_bzero(void *s, const size_t n)
 		*((char *) s) = 0;
 		s++;
 	}
-	while ((size_t) (fin - s) >= sizeof(long))
+	while ((size_t)(fin - s) >= sizeof(long))
 	{
 		*((long *) s) = 0;
 		s += sizeof(long);

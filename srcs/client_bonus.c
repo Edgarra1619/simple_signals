@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: edgribei <edgribei@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/11 15:08:37 by edgribei          #+#    #+#             */
+/*   Updated: 2025/06/11 15:09:59 by edgribei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <libft.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 //here to filter incoming signals
-int	g_serverpid;
+int		g_serverpid;
 
 void	send_message(const int pid, const char *message);
 
@@ -14,7 +26,7 @@ void	handle(const int signal, siginfo_t *const info,
 	(void) _cont;
 	if (g_serverpid != info->si_pid)
 		return ;
-	if(signal == SIGUSR1)
+	if (signal == SIGUSR1)
 		send_message(g_serverpid, NULL);
 	else
 	{
@@ -42,11 +54,10 @@ void	send_message(const int pid, const char *message)
 
 	if (message)
 		msg = message;
-	if(send_bit(pid, *msg))
+	if (send_bit(pid, *msg))
 		msg++;
 }
 
-#ifdef BONUS
 int	main(int argc, char **argv)
 {
 	struct sigaction	sig;
@@ -64,18 +75,7 @@ int	main(int argc, char **argv)
 	sigaction(SIGUSR1, &sig, NULL);
 	sigaction(SIGUSR2, &sig, NULL);
 	send_message(g_serverpid, argv[2]);
-	while(1)
+	while (1)
 		pause();
 	return (0);
 }
-#else
-int	main(int argc, char **argv)
-{
-	if (argc != 3)
-		return (1);
-	g_serverpid = ft_atoi(argv[1]);
-	send_message(g_serverpid, argv[2]);
-	return (0);
-}
-
-#endif

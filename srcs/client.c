@@ -15,36 +15,64 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	send_char(const int pid, const char c)
-{
-	char	i;
+//here to filter incoming signals
+static int		g_serverpid;
 
-	i = 0;
-	while (i < 8)
+void	send_message(const int pid, const char *message);
+
+void	handle(const int signal, siginfo_t *const info,
+			void *const _cont)
+{
+	(void) _cont;
+	if (g_serverpid != info->si_pid)
+		return ;
+	if (signal == SIGUSR1)
+		send_message(g_serverpid, NULL);
+}
+
+int	send_bit(const int pid, const char c)
+{
+	static char	i;
+
+	kill(pid, SIGUSR1 + 2 * ((c >> (7 - i)) & 1));
+	if (++i == 8)
 	{
-		kill(pid, SIGUSR1 + 2 * ((c >> (7 - i)) & 1));
-		i++;
-		usleep(100);
+		i = 0;
+		return (1);
 	}
+	return (0);
 }
 
 void	send_message(const int pid, const char *message)
 {
-	while (*message)
+	static const char	*msg;
+
+	if (message)
+		msg = message;
+	if (send_bit(pid, *msg))
 	{
-		send_char(pid, *(message++));
-		usleep(300);
+		if (!*msg)
+			exit(0);
+		msg++;
 	}
-	send_char(pid, 0);
 }
 
 int	main(int argc, char **argv)
 {
-	int	serverpid;
+	struct sigaction	sig;
+	sigset_t			set;
 
 	if (argc != 3)
 		return (1);
-	serverpid = ft_atoi(argv[1]);
-	send_message(serverpid, argv[2]);
+	g_serverpid = ft_atoi(argv[1]);
+	sigemptyset(&set);
+	sigaddset(&set, SIGUSR1);
+	sig.sa_flags = SA_SIGINFO;
+	sig.sa_mask = set;
+	sig.sa_sigaction = handle;
+	sigaction(SIGUSR1, &sig, NULL);
+	send_message(g_serverpid, argv[2]);
+	while (1)
+		pause();
 	return (0);
 }

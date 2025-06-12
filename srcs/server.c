@@ -68,6 +68,8 @@ static void	handler(const int signal, siginfo_t *const info,
 		c = 0;
 		offset = 0;
 	}
+	if (current_pid)
+		kill(current_pid, SIGUSR1);
 }
 
 #endif

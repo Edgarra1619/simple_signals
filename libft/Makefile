@@ -1,6 +1,6 @@
 NAME = libft.a
 SOURCES = ft_bsdstr.c ft_istests.c ft_iter.c ft_mem.c ft_memcheck.c ft_newstr.c \
-		 ft_putfd.c ft_splitrim.c ft_stdlib.c ft_string.c ft_to.c
+		ft_putfd.c ft_splitrim.c ft_stdlib.c ft_string.c ft_to.c
 SOURCES += ft_lstadd_bonus.c ft_lstdel_bonus.c ft_lstutils_bonus.c
 SRCSDIR = ./
 INCLUDEDIR = ./

@@ -34,7 +34,11 @@ int	send_bit(const int pid, const char c)
 {
 	static char	i;
 
-	kill(pid, SIGUSR1 + 2 * ((c >> (7 - i)) & 1));
+	if (kill(pid, SIGUSR1 + 2 * ((c >> (7 - i)) & 1)) == -1)
+	{
+		ft_putendl_fd("No process has such PID!!", 2);
+		exit (1);
+	}
 	if (++i == 8)
 	{
 		i = 0;
